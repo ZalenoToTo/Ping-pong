@@ -41,9 +41,9 @@ class HeroSprite(Gsprite):
             self.rect.y -= self.speed
         if  keys_pressed[K_DOWN] and self.rect.y<412 and p2w < 7:
             self.rect.y += self.speed
-        if  keys_pressed[K_DOWN] and self.rect.y>0 and p2w < 7:
+        if  keys_pressed[K_DOWN] and self.rect.y>0 and p2w >= 7:
             self.rect.y -= self.speed
-        if  keys_pressed[K_UP] and self.rect.y<412 and p2w < 7:
+        if  keys_pressed[K_UP] and self.rect.y<412 and p2w >= 7:
             self.rect.y += self.speed
 
     def bot(self,ball):
@@ -70,15 +70,15 @@ ball = Ball(512,256,8,'Ball.png',90,90,10)
 game = True
 finish = True
 imgSurf = None
-p1w = 4
+p1w = 0
 p2w = 0
 
 bool1 = True
 count1 = font_for_count.render(
-    "1st Player's wins"+str(p1w), True, (0,0,0)
+    "1st Player's wins: "+str(p1w), True, (0,0,0)
 )
 count2 = font_for_count.render(
-    "2nd Player's wins"+str(p2w), True, (0,0,0)
+    "2nd Player's wins: "+str(p2w), True, (0,0,0)
 )
 while game:
     for i in event.get():
@@ -111,6 +111,7 @@ while game:
                 )
                 new_ball.rect.x,new_ball.rect.y = 512,256
         if (6>p1w > 4 or 4 < p2w < 6) and bool1:
+            ball.speed+=3
             new_ball=Ball(512,256,6,'Ball.png',50,50,12)
             bool1 = False
             
@@ -135,28 +136,27 @@ while game:
         
         if p1w > 3 or p2w > 3:
             createRect+=1
-            print(createRect)
-            if createRect == 1_620 and imgSurf == None:
+            
+            if createRect == FPS*27 and imgSurf == None:
                 imgSurf = Surface((1024,512))
                 imgSurf.fill((200,0,200))
-            if createRect == 1_800:
+            if createRect == FPS*30:
                 imgSurf= None
                 createRect = 0
-                print(imgSurf)
+                
        
         clock.tick(FPS)
         
-        if p1w >90 :
+        if p1w >14 :
             defeat = font_for_win.render(
                     "1st player win!",True,(155,92,103)
                 )
             window.blit(defeat,(470,250))
             finish = False
-        if  p2w >90:
+        if  p2w >14:
             defeat = font_for_win.render(
                     "2nd player win!",True,(155,92,103)
                 )
             window.blit(defeat,(470,250))
             finish = False
         display.update()
-    
